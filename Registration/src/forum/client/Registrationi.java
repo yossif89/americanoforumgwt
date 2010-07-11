@@ -25,6 +25,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Frame;
+import com.google.gwt.user.client.ui.NamedFrame;
+import com.google.gwt.user.client.ui.Hidden;
 
 
 /**
@@ -74,17 +77,25 @@ public class Registrationi implements EntryPoint {
 		Button button = new Button("New button");
 		button.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				onModuleLoad_registrationWindow();
+				registrationWindow();
 			}
 		});
 		button.setText("Register");
 		horizontalPanel.add(button);
+		
+		RootPanel.get("frameContainer").add(mainPanel);
+		
+		
 				
 	}
+	
+	public void loginWindow(){
+		HTMLTable loginTable = new Grid(3,2);
+	}
 
-	public void onModuleLoad_registrationWindow() {
+	public void registrationWindow() {
 		
-		final VerticalPanel mainPanel = new VerticalPanel();
+		//final VerticalPanel mainPanel = new VerticalPanel();
 		
 		final HorizontalPanel firstPanel = new HorizontalPanel();
 		
@@ -212,7 +223,10 @@ public class Registrationi implements EntryPoint {
 
 
 
-		RootPanel.get("frameContainer").add(table);
+		//RootPanel.get("frameContainer").add(table);
+		final DialogBox registrationDialog = new DialogBox();
+		registrationDialog.setText("Registration Form");
+		registrationDialog.setWidget(table);	
 		
 		
 		registerButton.addClickHandler(new ClickHandler(){
@@ -243,6 +257,16 @@ public class Registrationi implements EntryPoint {
 			
 		});
 		
+		cancelButton.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				registrationDialog.hide();
+				registrationDialog.clear();
+			}
+		});
+		
+		registrationDialog.center();
+		registrationDialog.show();
 //		final Button sendButton = new Button("Send");
 //		final TextBox nameField = new TextBox();
 //		nameField.setText("GWT User");

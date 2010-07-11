@@ -2,6 +2,7 @@ package forum.client;
 
 
 
+import forum.server.persistencelayer.main;
 import forum.shared.communication.ServerResponse;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -28,6 +29,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.NamedFrame;
 import com.google.gwt.user.client.ui.Hidden;
+import com.google.gwt.user.client.ui.FormPanel;
 
 
 /**
@@ -63,16 +65,14 @@ public class Registrationi implements EntryPoint {
 //	private Label errorMsgLabel = new Label();
 	
 
-	/**
-	 * @wbp.parser.entryPoint
-	 */
+
 	@Override
 	public void onModuleLoad() {
 		final VerticalPanel mainPanel = new VerticalPanel();
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		mainPanel.add(horizontalPanel);
-		horizontalPanel.setSize("558px", "46px");
+		horizontalPanel.setSize("558px", "33px");
 		
 		Button button = new Button("New button");
 		button.addClickHandler(new ClickHandler() {
@@ -83,16 +83,168 @@ public class Registrationi implements EntryPoint {
 		button.setText("Register");
 		horizontalPanel.add(button);
 		
+		Button button_1 = new Button("New button");
+		button_1.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				loginWindow();
+			}
+		});
+		button_1.setText("Login");
+		horizontalPanel.add(button_1);
+		
+		Button button_2 = new Button("New button");
+		button_2.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				logoff();
+			}
+		});
+		button_2.setText("Logoff");
+		horizontalPanel.add(button_2);
+		
+		Button button_3 = new Button("New button");
+		button_3.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				searchWindow();
+			}
+		});
+		button_3.setText("Search");
+		horizontalPanel.add(button_3);
+		
 		RootPanel.get("frameContainer").add(mainPanel);
 		
 		
 				
 	}
+
+
+	public void searchWindow() {
+		final VerticalPanel mainPanel = new VerticalPanel();
+		
+		final TextBox phraseField = new TextBox();
+		final Label phraseLabel = new Label("Phrase:   ");
+		
+		final TextBox fromField = new TextBox();
+		final Label fromLabel = new Label("From:   ");
+		
+		final TextBox toField = new TextBox();
+		final Label toLabel = new Label("To:   ");
+		
+		final Label searchLabel = new Label("Search By:   ");
+		final RadioButton contentRadio = new RadioButton("searchBy","Content");
+		final RadioButton authorRadio = new RadioButton("searchBy","Author");
+		contentRadio.setEnabled(true);
+		
+		final Button searchButton = new Button("Search");
+		final Button cancelButton = new Button("Cancel");
+		
+		final DialogBox searchDialog = new DialogBox();
+		searchDialog.setText("Search Form");
+	
+		HTMLTable phraseTable = new Grid(1,2);
+		HTMLTable fromToTable = new Grid(1,4);
+		HTMLTable searchByTable = new Grid(1,3);
+		HTMLTable actionTable = new Grid(1,2);
+		
+		phraseTable.setWidget(0, 0, phraseLabel);
+		phraseTable.setWidget(0, 1, phraseField);
+		
+		fromToTable.setWidget(0, 0, fromLabel);
+		fromToTable.setWidget(0, 1, fromField);
+		fromToTable.setWidget(0, 2, toLabel);
+		fromToTable.setWidget(0, 3, toField);
+		
+		searchByTable.setWidget(0, 0, searchLabel);
+		searchByTable.setWidget(0, 1, authorRadio);
+		searchByTable.setWidget(0, 2, contentRadio);
+		
+		actionTable.setWidget(0, 0, searchButton);
+		actionTable.setWidget(0, 1, cancelButton);
+		
+		mainPanel.add(phraseTable);
+		mainPanel.add(fromToTable);
+		mainPanel.add(searchByTable);
+		mainPanel.add(actionTable);
+
+		searchDialog.setWidget(mainPanel);
+		
+		searchButton.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				//search!
+			}
+		});
+		
+		cancelButton.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				searchDialog.hide();
+				searchDialog.clear();
+			}
+		});
+		
+		searchDialog.center();
+		searchDialog.show();
+	}
+	
+	public void logoff(){
+		//needs to do logoff
+	}
 	
 	public void loginWindow(){
 		HTMLTable loginTable = new Grid(3,2);
+		final TextBox usernameField = new TextBox();
+		final Label usernameLabel = new Label("User name:   ");
+		
+		final PasswordTextBox passwordField = new PasswordTextBox();
+		final Label passLabel = new Label("Password:   ");
+		
+		final Button loginButton = new Button("Login");
+		final Button cancelButton = new Button("Cancel");
+		
+		loginTable.setCellSpacing(5);
+		
+		loginTable.setWidget(0, 0, usernameLabel);
+		loginTable.setWidget(0, 1, usernameField);
+		
+		loginTable.setWidget(1, 0, passLabel);
+		loginTable.setWidget(1, 1, passwordField);
+		
+		loginTable.setWidget(2, 0, loginButton);
+		loginTable.setWidget(2, 1, cancelButton);
+		
+		final DialogBox loginDialog = new DialogBox();
+		loginDialog.setText("Login Form");
+		loginDialog.setWidget(loginTable);	
+		
+		
+		loginButton.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				String username = usernameField.getText();
+				String password = passwordField.getText();
+				
+				//login(username, password, firstname, lastname, address, mail, gender);
+			}
+			
+		});
+		
+		cancelButton.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				loginDialog.hide();
+				loginDialog.clear();
+			}
+		});
+		
+		loginDialog.center();
+		loginDialog.show();
+
 	}
 
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public void registrationWindow() {
 		
 		//final VerticalPanel mainPanel = new VerticalPanel();
@@ -468,6 +620,4 @@ public class Registrationi implements EntryPoint {
 		
 		registerSvc.registerNewUser(username, password, firstname, lastname, address, mail, gender, callback);
 	}
-
-
 }

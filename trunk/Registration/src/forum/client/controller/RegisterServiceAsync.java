@@ -1,4 +1,4 @@
-package forum.client;
+package forum.client.controller;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

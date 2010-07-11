@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/ext_jars/slf4j-simple-1.5.8.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/ext_jars/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/ext_jars/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/ext_jars/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/ext_jars/hibernate3.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/ext_jars/javassist-3.9.0.GA.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/ext_jars/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/ext_jars/mysql-connector-java-5.1.12-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/ext_jars/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/compassJar/lucene-core.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/compassJar/commons-logging.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Yossi/My Documents/workspace/Registration/compassJar/compass-2.2.0.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

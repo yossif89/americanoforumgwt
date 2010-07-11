@@ -2,7 +2,7 @@ package forum.server.communication;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import forum.client.RegisterService;
+import forum.client.controller.RegisterService;
 import forum.server.domainlayer.ForumFacade;
 import forum.server.domainlayer.ForumFacadeImpl;
 import forum.shared.communication.ServerResponse;

@@ -1,7 +1,9 @@
-package forum.client;
+package forum.client.ui;
 
 
 
+import forum.client.controller.ControllerHandler;
+import forum.client.controller.RegisterService;
 import forum.server.persistencelayer.main;
 import forum.shared.communication.ServerResponse;
 
@@ -30,6 +32,9 @@ import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.NamedFrame;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 
 /**
@@ -44,27 +49,7 @@ public class Registrationi implements EntryPoint {
 			+ "attempting to contact the server. Please check your network "
 			+ "connection and try again.";
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting service.
-	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
-
-	/**
-	 * This is the entry point method.
-	 */
-	
-	/**
-	 * for creating the connection with the domain layer
-	 */
-	private RegisterServiceAsync registerSvc = GWT.create(RegisterService.class);
-	
-//	/**
-//	 * error label for registration failure. 
-//	 */
-//	private Label errorMsgLabel = new Label();
-	
-
+	private ControllerHandler controllerHandler = new ControllerHandler();
 
 	@Override
 	public void onModuleLoad() {
@@ -110,13 +95,73 @@ public class Registrationi implements EntryPoint {
 		button_3.setText("Search");
 		horizontalPanel.add(button_3);
 		
+		Button button_4 = new Button("New button");
+		button_4.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				promoteWindow();
+			}
+		});
+		button_4.setText("Promote");
+		horizontalPanel.add(button_4);
+		
 		RootPanel.get("frameContainer").add(mainPanel);
 		
 		
 				
 	}
 
-
+	/**
+	 * @wbp.parser.entryPoint
+	 */
+	public void promoteWindow(){
+		final VerticalPanel mainPanel = new VerticalPanel();
+		mainPanel.setStyleName("dialogVPanel");
+		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
+		final Label promoteLabel = new Label("User to Promote:   ");
+		final Button promoteButton = new Button("Promote");
+		final Button cancelButton = new Button("Cancel");
+		
+		final DialogBox promoteDialog = new DialogBox();
+		promoteDialog.setText("Promote User");
+		
+		HTMLTable userTable = new Grid(1,2);
+		userTable.setCellSpacing(6);
+		userTable.setHeight("");
+		userTable.setCellPadding(6);
+		userTable.setWidget(0, 0, promoteLabel);
+		
+		HorizontalPanel controlsPanel = new HorizontalPanel(); //for the buttons
+		controlsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+		controlsPanel.setSpacing(15);
+		controlsPanel.add(promoteButton);
+		controlsPanel.add(cancelButton);
+		
+		mainPanel.add(userTable);
+		
+		ListBox comboBox = new ListBox();
+		userTable.setWidget(0, 1, comboBox);
+		mainPanel.add(controlsPanel);
+		
+		promoteButton.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				//promote!
+			}
+		});
+		cancelButton.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				promoteDialog.hide();
+				promoteDialog.clear();
+			}
+		});
+		
+		promoteDialog.setWidget(mainPanel);
+		promoteDialog.center();
+		promoteDialog.show();
+		
+	}
+	
 	public void searchWindow() {
 		final VerticalPanel mainPanel = new VerticalPanel();
 		
@@ -242,9 +287,7 @@ public class Registrationi implements EntryPoint {
 
 	}
 
-	/**
-	 * @wbp.parser.entryPoint
-	 */
+	
 	public void registrationWindow() {
 		
 		//final VerticalPanel mainPanel = new VerticalPanel();
@@ -530,11 +573,11 @@ public class Registrationi implements EntryPoint {
 //		nameField.addKeyUpHandler(handler);
 	}
 	
-	private void register(String username,String password,String firstname,String lastname,String address,String mail,String gender){
+	public void register(String username,String password,String firstname,String lastname,String address,String mail,String gender){
 		//init the service proxy
-		if(registerSvc == null){
-			registerSvc = GWT.create(RegisterService.class);
-		}
+	//	if(controllerHandler.registerSvc == null){
+	//		controllerHandler.registerSvc = GWT.create(RegisterService.class);
+	//	}
 		
 		//set up the callback object
 		AsyncCallback<ServerResponse> callback = new AsyncCallback<ServerResponse>(){
@@ -618,6 +661,6 @@ public class Registrationi implements EntryPoint {
 			
 		};
 		
-		registerSvc.registerNewUser(username, password, firstname, lastname, address, mail, gender, callback);
+		controllerHandler.registerNewUser(username, password, firstname, lastname, address, mail, gender, callback);
 	}
 }

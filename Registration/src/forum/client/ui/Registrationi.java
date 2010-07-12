@@ -2,7 +2,10 @@ package forum.client.ui;
 
 
 
-import forum.client.controller.RegisterService;
+import java.util.StringTokenizer;
+
+
+import forum.client.controller.*;
 import forum.server.persistencelayer.main;
 import forum.shared.communication.ServerResponse;
 
@@ -10,6 +13,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -40,6 +44,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Registrationi implements EntryPoint {
+	
+	private static final int REFRESH_INTERVAL = 5000; // ms
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -49,13 +55,22 @@ public class Registrationi implements EntryPoint {
 			+ "connection and try again.";
 
 	private ServicesHandler serviceHandler = new ServicesHandler();
-
+	private ForumViewServiceAsync forumViewSvc = GWT.create(ForumViewService.class);
+	final VerticalPanel rootMainPanel = new VerticalPanel();
+	final VerticalPanel usersList = new VerticalPanel();
+	
+	
 	@Override
 	public void onModuleLoad() {
-		final VerticalPanel mainPanel = new VerticalPanel();
+
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		mainPanel.add(horizontalPanel);
+	
+		
+		rootMainPanel.add(horizontalPanel);
+		rootMainPanel.add(usersList);
+		usersList.setVisible(true);
+		usersList.setBorderWidth(1);
 		horizontalPanel.setSize("558px", "33px");
 		
 		Button button = new Button("New button");
@@ -103,12 +118,101 @@ public class Registrationi implements EntryPoint {
 		button_4.setText("Promote");
 		horizontalPanel.add(button_4);
 		
-		RootPanel.get("frameContainer").add(mainPanel);
-		
-		
-				
+		RootPanel.get("frameContainer").add(rootMainPanel);
+		Timer refreshTimer = new Timer() {
+		      @Override
+		      public void run(){
+		        refreshForum(rootMainPanel,usersList);
+		      }
+		    };
+		 refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
+		 refreshForum(rootMainPanel,usersList);
 	}
 
+	 private void refreshForum(VerticalPanel mainPanel, final VerticalPanel usersList){
+	    	//init the service proxy
+			if(forumViewSvc == null){
+				forumViewSvc = GWT.create(ForumViewService.class);
+			}
+			System.out.println("1");
+			//set up the callback object
+			AsyncCallback<ServerResponse> callback = new AsyncCallback<ServerResponse>(){
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					System.out.println("onFailure");
+				}
+
+				@Override
+				public void onSuccess(ServerResponse result) {
+					System.out.println("onsuccess");
+					String forumView = result.getResponse();
+					decode(forumView,usersList);
+				}
+
+			};
+		System.out.println("2");
+			forumViewSvc.forumView(serviceHandler.getCurr_username(),callback);
+	    }
+	 
+	 
+	 public void decode(String encodedView, VerticalPanel usersList) {
+			// TODO Auto-generated method stub
+	    	 System.out.println("encoded view: "+encodedView);
+	    	 StringTokenizer d;
+	         //HashMap<Long,ForumCell> mapping = new HashMap<Long, ForumCell>();
+	         //ForumCell toRet=new ForumCell(-2,"666666666666","66666666666","66666666666666666");
+	          //ForumCell temp;
+	         StringTokenizer lineTok = new StringTokenizer(encodedView,"\n");
+	         
+	         //statusPanel.setSize(610,statusPanel.getHeight());
+	         final Label detailLabel = new Label("Hello" + lineTok.nextToken() + "There are " + lineTok.nextToken());
+//	         this.statusPanel.get_Name().setText(lineTok.nextToken());
+//	         this.statusPanel.get_Size().setText("There are "+lineTok.nextToken()+" online users:");
+	         String users = lineTok.nextToken();
+	         StringTokenizer psikTok = new StringTokenizer(users,",");
+	         int counter =0;
+	         String newUsers="";
+	         while (psikTok.hasMoreTokens()){
+	             if (counter>7){
+	                 counter=0;
+	                 newUsers+="\n";
+	             }
+	             newUsers+=psikTok.nextToken()+",";
+	             counter++;
+	         }
+	         final Label onLineLabel = new Label(newUsers.substring(0,newUsers.length()-1));
+	         usersList.add(detailLabel);
+	         usersList.add(onLineLabel);
+	         
+	         
+//	         this.statusPanel.get_Online().setText(newUsers.substring(0,newUsers.length()-1));
+	         
+	//
+//	           StringTokenizer tempTok;
+//	         while(lineTok.hasMoreTokens()){
+	//
+//	             String line = lineTok.nextToken();
+//	             tempTok = new StringTokenizer(line, "$$");
+//	             String first = tempTok.nextToken();
+//	             if(first.indexOf(",")<=0){
+//	                     temp = getDataFromLine(line);
+//	                     toRet.add(temp);
+//	                     mapping.put(temp.getId(), temp);
+//	             }
+//	             else{
+//	                     temp = getDataFromLine(line.substring(line.indexOf(",")+1));
+//	                     tempTok = new StringTokenizer(first, ",");
+//	                     long fatherId = Long.parseLong(tempTok.nextToken());
+//	                     mapping.get(fatherId).add(temp);
+//	                     mapping.put(temp.getId(), temp);
+//	             }
+//	         }
+	       //return toRet;
+			//*******************************
+		}
+	
+	
 	/**
 	 * @wbp.parser.entryPoint
 	 */

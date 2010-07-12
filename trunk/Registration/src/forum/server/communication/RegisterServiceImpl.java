@@ -27,4 +27,10 @@ public class RegisterServiceImpl extends RemoteServiceServlet implements
 		
 	}
 
+	@Override
+	public ServerResponse login(String username, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

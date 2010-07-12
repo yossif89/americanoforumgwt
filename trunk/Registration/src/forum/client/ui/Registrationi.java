@@ -2,7 +2,6 @@ package forum.client.ui;
 
 
 
-import forum.client.controller.ControllerHandler;
 import forum.client.controller.RegisterService;
 import forum.server.persistencelayer.main;
 import forum.shared.communication.ServerResponse;
@@ -49,7 +48,7 @@ public class Registrationi implements EntryPoint {
 			+ "attempting to contact the server. Please check your network "
 			+ "connection and try again.";
 
-	private ControllerHandler controllerHandler = new ControllerHandler();
+	private ServicesHandler serviceHandler = new ServicesHandler();
 
 	@Override
 	public void onModuleLoad() {
@@ -447,7 +446,7 @@ public class Registrationi implements EntryPoint {
 					}
 				}
 				
-				register(username, password, firstname, lastname, address, mail, gender);				
+				serviceHandler.register(username, password, firstname, lastname, address, mail, gender);				
 			}
 			
 		});
@@ -571,96 +570,5 @@ public class Registrationi implements EntryPoint {
 //		MyHandler handler = new MyHandler();
 //		sendButton.addClickHandler(handler);
 //		nameField.addKeyUpHandler(handler);
-	}
-	
-	public void register(String username,String password,String firstname,String lastname,String address,String mail,String gender){
-		//init the service proxy
-	//	if(controllerHandler.registerSvc == null){
-	//		controllerHandler.registerSvc = GWT.create(RegisterService.class);
-	//	}
-		
-		//set up the callback object
-		AsyncCallback<ServerResponse> callback = new AsyncCallback<ServerResponse>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				final DialogBox dialogBox = new DialogBox(false);
-				//dialogBox.setStyleName("registrationError-DialogBox");
-				dialogBox.setText("Error");
-				dialogBox.setAnimationEnabled(true);
-				dialogBox.setGlassEnabled(false);
-				HTML message = new HTML("Error while registrating: "+caught.getMessage());
-				message.setStyleName("registrationError-DialogBox-message");
-				ClickHandler listener = new ClickHandler(){
-					@Override
-					public void onClick(ClickEvent event) {
-						dialogBox.hide();
-						dialogBox.removeFromParent();
-					}
-				};
-				Button button = new Button("close",listener);
-				VerticalPanel DialogBoxContents = new VerticalPanel();
-				
-				DialogBoxContents.add(message);
-				DialogBoxContents.add(button);
-				dialogBox.setWidget(DialogBoxContents);
-				dialogBox.center();
-				
-			}
-
-			@Override
-			public void onSuccess(ServerResponse result) {
-				if((result.hasExecuted()) && (!result.getResponse().equals(""))){
-					final DialogBox dialogBox = new DialogBox(false);
-					//dialogBox.setStyleName("registrationSuccess-DialogBox");
-					dialogBox.setText("Information");
-					dialogBox.setAnimationEnabled(true);
-					dialogBox.setGlassEnabled(false);
-					HTML message = new HTML("Registration completed!");
-					message.setStyleName("registrationSuccess-DialogBox-message");
-					ClickHandler listener = new ClickHandler(){
-						@Override
-						public void onClick(ClickEvent event) {
-							dialogBox.hide();
-							dialogBox.removeFromParent();
-						}
-					};
-					Button button = new Button("close",listener);
-					VerticalPanel DialogBoxContents = new VerticalPanel();
-					
-					DialogBoxContents.add(message);
-					DialogBoxContents.add(button);
-					dialogBox.setWidget(DialogBoxContents);
-					dialogBox.center();	
-				}
-				
-				else{
-					final DialogBox dialogBox = new DialogBox(false);
-					//dialogBox.setStyleName("registrationError-DialogBox");
-					dialogBox.setText("Error");
-					dialogBox.setAnimationEnabled(true);
-					dialogBox.setGlassEnabled(false);
-					HTML message = new HTML("Error while registrating: "+result.getEx().getMessage());
-					message.setStyleName("registrationError-DialogBox-message");
-					ClickHandler listener = new ClickHandler(){
-						@Override
-						public void onClick(ClickEvent event) {
-							dialogBox.hide();
-							dialogBox.removeFromParent();
-						}
-					};
-					Button button = new Button("close",listener);
-					VerticalPanel DialogBoxContents = new VerticalPanel();
-					
-					DialogBoxContents.add(message);
-					DialogBoxContents.add(button);
-					dialogBox.setWidget(DialogBoxContents);
-					dialogBox.center();
-				}
-			}
-			
-		};
-		
-		controllerHandler.registerNewUser(username, password, firstname, lastname, address, mail, gender, callback);
 	}
 }
